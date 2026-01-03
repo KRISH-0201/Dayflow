@@ -1,3 +1,5 @@
+# database.py - COMPLETE UPDATED FILE
+
 """
 MongoDB Database Configuration
 Handles all database connections and collections
@@ -12,7 +14,7 @@ load_dotenv()
 
 # MongoDB connection
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-DB_NAME = "Cluster0"
+DB_NAME = os.getenv("DB_NAME", "dayflow_hrms")
 
 try:
     client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
@@ -27,6 +29,7 @@ try:
     employees_col = db["employees"]
     attendance_col = db["attendance"]
     leave_requests_col = db["leave_requests"]
+    working_hours_col = db["working_hours"]  # ✅ NEW
     
     # Create indexes for better performance
     users_col.create_index("employee_id", unique=True)
@@ -34,6 +37,7 @@ try:
     employees_col.create_index("employee_id", unique=True)
     attendance_col.create_index([("employee_id", 1), ("date", -1)])
     leave_requests_col.create_index([("employee_id", 1), ("status", 1)])
+    working_hours_col.create_index([("employee_id", 1), ("date", -1)])  # ✅ NEW
     
     print("✅ Database indexes created")
     
@@ -43,3 +47,4 @@ except Exception as e:
     employees_col = None
     attendance_col = None
     leave_requests_col = None
+    working_hours_col = None  # ✅ NEW
